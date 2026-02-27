@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mariadb-pod
+  labels:
+    app: mariadb
+spec:
+  containers:
+  - name: mariadb-container
+    image: mariadb:12.1.2
+    ports:
+    - containerPort: 3306
+    # env:
+    # - name: MARIADB_HOST
+    #   valueFrom:
+    #     configMapKeyRef:
+    #       name: mariadb-config
+    #       key: MARIADB_HOST
+    # env:
+    # - name: MARIADB_PORT
+    #   valueFrom:
+    #     configMapKeyRef:
+    #       name: mariadb-config
+    #       key: MARIADB_PORT
+    env:
+    - name: MARIADB_ROOT_PASSWORD
+      valueFrom:
+        configMapKeyRef:
+          name: mariadb-config
+          key: MARIADB_ROOT_PASSWORD
+    # env:
+    # - name: MARIADB_DATABASE
+    #   valueFrom:
+    #     configMapKeyRef:
+    #       name: mariadb-config
+    #       key: MARIADB_DATABASE
+    # env:
+    # - name: TZ
+    #   valueFrom:
+    #     configMapKeyRef:
+    #       name: mariadb-config
+    #       key: TZ
+    # env:
+    # - name: LC_ALL
+    #   valueFrom:
+    #     configMapKeyRef:
+    #       name: mariadb-config
+    #       key: LC_ALL
+    volumeMounts:
+    - name: mariadb-vol
+      mountPath:  /var/lib/mysql
+    - name: mariadb-config-volume
+      mountPath:  /etc/mysql/conf.d/my.cnf
+  volumes:
+    - name: mariadb-vol
+      persistentVolumeClaim:
+        claimName: mariadb-pvc
+    - name: mariadb-config-volume
+      configMap:
+        name: mariadb-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: mariadb    
+      

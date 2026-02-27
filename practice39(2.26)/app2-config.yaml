@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app2-config
+data:
+  ROOT_PATH: "/app1"
+  CLIENT_ID: "1ba8a56e75ea7c51049b4b4d7311fe5d"
+  CLIENT_SECRET:  "Oee2r8hhnhDnqoPXqItbD4EGIhSWMkXi"
+  REDIRECT_URI:  "http://aiedu.tplinkdns.com:6102/app1/oauth/callback/kakao"
+  DNS:  "aiedu.tplinkdns.com"
+  SECURE: "False"
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  REDIS_ACCESS_DB:  "0"
+  REDIS_REFRESH_DB: "1"
